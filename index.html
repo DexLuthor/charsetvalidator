@@ -201,11 +201,11 @@
             if (result.length > 0) {
                 textInput.classList.remove("valid");
                 textInput.classList.add("invalid");
-                console.log("Invalid characters found:", result);
+                
+                document.getElementById('chars').innerText = result
             } else {
                 textInput.classList.add("valid");
                 textInput.classList.remove("invalid");
-                console.log("Text is valid for charset", charset);
             }
         } else {
             console.log("Warning: Charset validation not supported for", charset);
@@ -228,5 +228,6 @@
     <i class="fas fa-check"></i> Validate
   </button>
 </div>
+<p id="chars"></p>
 </body>
 </html>
