@@ -125,6 +125,17 @@
           transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
           font-size: 24px;
           margin: 0;
+          outline: none;
+      }
+
+      textarea.valid {
+          box-shadow: 0 0 10px rgba(0, 255, 0, 0.6);
+          border: 2px solid green;
+      }
+
+      textarea.invalid {
+          box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+          border: 2px solid red;
       }
 
       .submit-row {
@@ -143,14 +154,22 @@
   </style>
 </head>
 <body class="dark-mode">
-<script>
+<script >
+    
     function toggleDarkMode() {
         document.body.classList.toggle("dark-mode");
+    }
+
+    function changeText() {
+        const textInput = document.getElementById("textInput");
+        textInput.classList.remove("valid");
+        textInput.classList.remove("invalid");
     }
 
     function runValidation() {
         const textInput = document.getElementById("textInput");
         const charsetSelect = document.getElementById("charsetSelect");
+
         const text = textInput.value;
         const charset = charsetSelect.value;
 
@@ -180,8 +199,12 @@
         if (charset in charsetRanges) {
             const result = validateAgainstCharset(text, charset);
             if (result.length > 0) {
+                textInput.classList.remove("valid");
+                textInput.classList.add("invalid");
                 console.log("Invalid characters found:", result);
             } else {
+                textInput.classList.add("valid");
+                textInput.classList.remove("invalid");
                 console.log("Text is valid for charset", charset);
             }
         } else {
@@ -193,7 +216,7 @@
   <i class="fas fa-moon"></i>
 </button>
 <div class="textarea-container">
-  <textarea class="textarea" id="textInput" name="textInput"></textarea>
+  <textarea class="textarea" id="textInput" name="textInput" onchange="changeText()"></textarea>
 </div>
 <div class="submit-row">
   <select id="charsetSelect" name="charsetSelect">
