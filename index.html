@@ -151,11 +151,19 @@
       select {
           width: max-content;
       }
+
+      .invisible-char {
+          border: 1px dotted rgba(216, 65, 65, 0.7);
+      }
   </style>
 </head>
 <body class="dark-mode">
-<script >
-    
+<script>
+    function isInvisible(char) {
+        const invisibleCharPattern = /[\x00-\x1F\x7F\s\u200B\u200C\u200D\u200E\u200F\u202A-\u202E\u2060\uFEFF\u00A0\u202F]/;
+        return invisibleCharPattern.test(char);
+    }
+
     function toggleDarkMode() {
         document.body.classList.toggle("dark-mode");
     }
@@ -191,9 +199,15 @@
 
             if (typeof validation === "function") {
                 return validation(text) ? [] : [...text];
-            } else {
-                return [...text].filter(char => !validation.test(char));
             }
+            return [...text]
+                .filter(char => !validation.test(char))
+                .map(invalidChar => {
+                    if (isInvisible(invalidChar)) {
+                        return `<span class="invisible-char">${invalidChar}</span>`;
+                    }
+                    return invalidChar;
+                });
         }
 
         if (charset in charsetRanges) {
@@ -201,8 +215,8 @@
             if (result.length > 0) {
                 textInput.classList.remove("valid");
                 textInput.classList.add("invalid");
-                
-                document.getElementById('chars').innerText = result
+
+                document.getElementById('chars').innerHTML = result
             } else {
                 textInput.classList.add("valid");
                 textInput.classList.remove("invalid");
