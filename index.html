@@ -31,6 +31,7 @@
           max-width: 1200px;
           margin: 0 auto;
           padding: 20px;
+          width: 100%;
       }
 
       .header {
@@ -38,6 +39,8 @@
           justify-content: space-between;
           align-items: center;
           margin-bottom: 20px;
+          flex-wrap: wrap;
+          gap: 15px;
       }
 
       .title {
@@ -49,17 +52,19 @@
           display: flex;
           gap: 15px;
           align-items: center;
+          flex-wrap: wrap;
       }
 
       .textarea-container {
           margin-bottom: 20px;
+          width: 100%;
       }
 
       .textarea {
           width: 100%;
           height: 300px;
           padding: 15px;
-          resize: none;
+          resize: vertical;
           border: 2px solid #ccc;
           border-radius: 8px;
           background-color: white;
@@ -68,6 +73,7 @@
           font-size: 16px;
           outline: none;
           font-family: monospace;
+          min-height: 200px;
       }
 
       .dark-mode .textarea {
@@ -92,6 +98,7 @@
           margin-bottom: 20px;
           font-size: 14px;
           color: #666;
+          flex-wrap: wrap;
       }
 
       .dark-mode .stats {
@@ -121,6 +128,7 @@
           display: flex;
           flex-wrap: wrap;
           gap: 10px;
+          justify-content: flex-start;
       }
 
       .char-card {
@@ -131,6 +139,8 @@
           flex-direction: column;
           align-items: center;
           min-width: 80px;
+          flex: 1 1 calc(25% - 10px);
+          max-width: calc(25% - 10px);
       }
 
       .dark-mode .char-card {
@@ -235,6 +245,86 @@
           background-color: #f44336;
           color: white;
       }
+
+      /* Media Queries */
+      @media (max-width: 768px) {
+          .container {
+              padding: 15px;
+          }
+
+          .header {
+              flex-direction: column;
+              align-items: flex-start;
+          }
+
+          .controls {
+              width: 100%;
+              justify-content: space-between;
+          }
+
+          .char-card {
+              flex: 1 1 calc(33.33% - 10px);
+              max-width: calc(33.33% - 10px);
+          }
+
+          select, button {
+              padding: 8px 12px;
+              font-size: 13px;
+          }
+
+          .title {
+              font-size: 20px;
+          }
+      }
+
+      @media (max-width: 480px) {
+          .container {
+              padding: 10px;
+          }
+
+          .controls {
+              flex-direction: column;
+              align-items: stretch;
+          }
+
+          .char-card {
+              flex: 1 1 calc(50% - 10px);
+              max-width: calc(50% - 10px);
+          }
+
+          .stats {
+              flex-direction: column;
+              gap: 10px;
+          }
+
+          .textarea {
+              height: 250px;
+              min-height: 150px;
+          }
+
+          select, button {
+              width: 100%;
+              text-align: center;
+          }
+
+          .toggle-dark-mode {
+              width: 40px;
+              height: 40px;
+              margin: 0 auto;
+          }
+      }
+
+      @media (max-width: 320px) {
+          .char-card {
+              flex: 1 1 100%;
+              max-width: 100%;
+          }
+
+          .textarea {
+              height: 200px;
+              min-height: 120px;
+          }
+      }
   </style>
 </head>
 <body class="dark-mode">
@@ -247,7 +337,7 @@
                 <option value="latin1">Latin-1</option>
                 <option value="utf8mb4">UTF-8 (mb4)</option>
             </select>
-            <button class="submit" onclick="runValidation()">
+            <button class="submit" onclick="runValidation()" id="validateButton" disabled>
                 <i class="fas fa-check"></i> Validate
             </button>
             <button class="toggle-dark-mode" onclick="toggleDarkMode()">
@@ -257,7 +347,7 @@
     </div>
 
     <div class="textarea-container">
-        <textarea class="textarea" id="textInput" name="textInput" onchange="changeText()" placeholder="Enter text to validate..."></textarea>
+        <textarea class="textarea" id="textInput" name="textInput" onchange="changeText()" onkeydown="handleKeyDown(event)" placeholder="Enter text to validate..."></textarea>
     </div>
 
     <div class="stats">
@@ -288,12 +378,23 @@
 
     function changeText() {
         const textInput = document.getElementById("textInput");
+        const validateButton = document.getElementById("validateButton");
+        validateButton.disabled = textInput.value.trim() === '';
+        
         textInput.classList.remove("valid");
         textInput.classList.remove("invalid");
         document.getElementById("validationStatus").textContent = "Not validated";
         document.getElementById("validationStatus").className = "validation-status";
         document.getElementById("results").style.display = "none";
         updateCharCount();
+    }
+
+    function handleKeyDown(event) {
+        // Check for Cmd+Enter (Mac) or Ctrl+Enter (Windows/Linux)
+        if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+            event.preventDefault();
+            runValidation();
+        }
     }
 
     function runValidation() {
