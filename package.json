@@ -1,0 +1,23 @@
+{
+  "name": "charset-validator",
+  "version": "1.0.0",
+  "description": "A tool for validating text against different character sets",
+  "main": "charset-validator.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "charset",
+    "validation",
+    "ascii",
+    "latin1",
+    "utf8"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+} 
