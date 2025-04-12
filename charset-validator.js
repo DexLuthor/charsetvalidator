@@ -80,7 +80,8 @@ function validateAgainstCharset(text, charset) {
         }));
 }
 
-module.exports = {
+export {
     validateAgainstCharset,
-    isInvisible
+    isInvisible,
+    charsetRanges
 }; 

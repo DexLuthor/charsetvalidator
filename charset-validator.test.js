@@ -1,4 +1,4 @@
-const { validateAgainstCharset, isInvisible } = require('./charset-validator');
+import { validateAgainstCharset, isInvisible } from './charset-validator.js';
 
 describe('Charset Validator', () => {
     describe('ASCII Validation', () => {
