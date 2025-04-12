@@ -21,6 +21,9 @@
   "license": "MIT",
   "devDependencies": {
     "jest": "^29.7.0",
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
